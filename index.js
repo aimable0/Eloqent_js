@@ -1,83 +1,105 @@
-myName = 'aimable\'';
+if (true) {
+    var x = 100;
+    // let y = 12;
+}
+console.log(x);
+// console.log(y);
 
-console.log(myName);
-console.log("A newline character is written like \"\\n\".");
-console.log('a' < 'z');
-console.log('a' < 'A');
-console.log(NaN != NaN);
+// functions definition
+const halve = function() {
+    return n / 2;
+};
 
+let n = 10;
+console.log(halve());
 
-noValue1 = undefined;
-noValue2 = null;
-console.log(noValue1);
-console.log(noValue2);
-console.log(true == 1);
-console.log(null == undefined);
-console.log("");
-// normal comparison that does some type conversion ==
-// strict comparison that doesn't do type conversion ===
-
-// null and undefined both mean empty value or no value (though they themselves are values)
-
-
-// --- LOGICAL OPERATORS -----
-
-// logical operators && ||
-// they actually do return values (original left hand value or right hand value),
-// depending on which value can be converted to true.
-
-myAge = 24 || 21;
-console.log(myAge);
-myAge = false || true;
-console.log(myAge);
-myAge = true || false;
-console.log(myAge);
-
-// example usecase
-// assume we are retrieving some data from the db
-// we store it in the variable data, but data can be null or empty if no data retrieved
-// case 1
-data = "Data recieved"; // data stores the data received from database.
-retrievedData = data || "empty data"; // in this case the string 'empty data' is a fall back default value in case data is something like null
-console.log(retrievedData);
-
-// that above represents this..
-if (data == null) {
-    retrievedData = "empty data";
-} else {
-    retrievedData = data;
+const halve$ = function(n) {
+    return n / 2;
 }
 
-// note that in such cases, 0, NaN, and "" count as false.
-// therefore eventhoug data variable had stored a "" in it it would be still counted as false
-// and the default value would be assigned to retrievedData.
+console.log(halve$(25));
 
-// the ?? operator
-// this is quite the same as || but this always returns the left hand value (even when its false or can count as false)
-// UNLESS the value on the left hand is null or undefined,
-console.log(0 ?? 100); //-> 0
-console.log(null ?? 4); // -> 4
-console.log(undefined ?? 5) // -> 5
-console.log(undefined ?? null) // -> null
-console.log(false ?? true) // -> false
+const greet = function() {
+    console.log("Hello!");
+};
+
+// ---- function declaration -----
+function greetPeople() {
+    return greet;
+}
+
+const functionReturned = greetPeople();
+functionReturned();
+
+console.log("Mr Aimable", "Hello");
+
+// ----- arrow functions ------
+const arrowFunction = (userName) => {
+    console.log(`Hello ${userName ?? "User"}!`);
+    // console.log("Hello,", userName ?? "User", "!");
+}
+arrowFunction("Aimable");
+
+// other ways to write arrow function
+// when we have just one param and only one line in the function body.
+const arrowFunc1 = userAge => console.log(`You are ${userAge} years old.`);
+arrowFunc1(12);
+
+// when we have just one return statement in the function body and only it.
+const arrowFunc2 = () => "This function just returned!";
+let valueReturned = arrowFunc2();
+console.log(valueReturned);
+
+let value$ = arrowFunc1(12);
+console.log("The value is the following:", value$);
 
 
-// short-circuiting
-age = 20;
+console.log(undefined === undefined);
 
-// in the case below age-- expression will be changed
-// and its true because numbers other than 0 count as true
-1 > 4 || age--;
-console.log(age);
 
-// in this case short-circuit will prevent us from running the epxression age--
-// because 1 < 4 is already true. no more need for further evaluation of the right-hand express
-1 < 4 || age--;
-console.log(age);
+/**
+ * functions in Js can have too many and too few arguments and the program will not treat that as error
+ * rather if too many; the others are ignored
+ * if too few; the params will be assigned with undefined
+ * this can be useful with it's pros and cons.
+ * see example below to greet a user.
+ */
+function greetUser(firstName, secondName) {
+    console.log(`Hello, Mr ${firstName ?? "User"} ${secondName ?? ""}`);
+}
+greetUser("Aimable", "Nkurikiyimana");
+greetUser("Aimable");
+greetUser();
 
-"aimable" // an expression
-"aimable"; // a statement
-// statements and expression may have side effects.
-myGender = "female" +
-"male";
-console.log(myGender);
+// we could even fine tune that behaviour by using explicit defalut values.
+function greetUser1(firstName="User", secondName="") {
+    console.log(`Hello, Mr ${firstName} ${secondName}`);
+}
+
+greetUser("Muhire", "Didier");
+greetUser("Didier");
+greetUser();
+
+// ------  CLOSURE -----
+function wrapValue(n) {
+    return () => n;
+}
+
+let wrap1 = wrapValue(1);
+let wrap2 = wrapValue(2);
+console.log(wrap1());
+console.log(wrap2());
+
+// more closures
+// important note is that twice and thrice sees and remembers environmnt in which they were created not in which they were called.
+// unless ofcourse its using global bindings..
+function multiplier(factor) {
+    // the function being returned is a closure..
+    return number => number * factor;
+}
+
+const twice = multiplier(2);
+const thrice = multiplier(3);
+
+console.log(twice(5));
+console.log(thrice(5));
