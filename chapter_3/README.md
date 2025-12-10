@@ -1,0 +1,1 @@
+This chapter deals with functions in JavaScript.
