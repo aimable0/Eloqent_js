@@ -81,5 +81,9 @@ console.log(notChangingObject);
 notChangingObject.age = 24; // okey eve on 'const' object.
 notChangingObject.name = 'BabuG';
 console.log(notChangingObject);
-// when is const effective then
-notChangingObject = {}; // here when trying to change the object the const binding is pointing at.
+// when is const effective then in this case.
+//! notChangingObject = {}; // here when trying to change the object the const binding is pointing at.
+
+
+// MATH OBJECT: a collection of properties (methods) of Number values.
+console.log(Math.floor(Math.random() * 100));

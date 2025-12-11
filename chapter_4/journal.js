@@ -126,5 +126,62 @@ function createTable(event) {
 //     return table;
 // }
 
-let freqTable = createTable('pizza');
-console.log(freqTable);
+// test
+// let freqTable = createTable('pizza');
+// console.log(freqTable); // -> [ 76, 9, 4, 1 ]
+
+// phi function to calculate the correlation.
+
+function phi(table) {
+    return (table[3] * table[0] - table[2] * table[1]) /
+        Math.sqrt((table[2] + table[3]) *
+                  (table[0] + table[1]) *
+                  (table[1] + table[3]) *
+                  (table[0] + table[2]));
+}
+
+// test phi function.
+// console.log(phi(freqTable));
+
+// challenge: find a correlation for every type of event that was recorded and see whether anything stands out.
+// my first appraoch:
+//  1 we create a list of all events.
+function getEvents(journal) {
+    let events = [];
+    for (let entry of journal) {
+        for (let event of entry.events) {
+            if (!events.includes(event))
+                events.push(event);
+        }
+    }
+    return events;
+}
+
+let allEvents = getEvents(JOURNAL);
+// console.log(allEvents);
+
+//2. we loop through them and check what might a have a correllatin of 1.
+for (let event of allEvents) {
+    let table = createTable(event);
+    // if (Math.round(phi(table)) == 1)
+    //     console.log(`This activity: '${event}' is the 'likeliest' cause of the transformation`);
+    if (phi(table) >= 0.1 || phi(table) <= -0.1)
+        console.log(`${event}: ${phi(table)}`);
+}
+
+
+// form the analysis eatin' peanuts have signigicant impact on the likelihood of causing trasnformatio
+// and brushing teeth has significant negative impact on the likelihood of transforming
+// can we try to analyze this two together?
+// let's try to add the event 'peanut teeth' on each day the peanuts are eaten and teeths were not brushed.
+// and then we will try to evaluate the phi of the new event 'peanut teeth' and the squirrelness
+for (entry of JOURNAL) {
+    // console.log(entry.events);
+    if (entry.events.includes('peanuts') && !entry.events.includes('brushed teeth')) {
+        entry.events.push('peanut teeth') // we ate peanuts and didn't brush our teeth
+    }
+}
+
+// what would be the phi of the new event 'peanut teeth' be then ?
+console.log(`Eating peanuts and not brushing teeth gives a phi of: ${phi(createTable('peanut teeth'))}`); // -> 1
+// meaning that the transformation is being caused by eating peanut and not brushing the teeths.
