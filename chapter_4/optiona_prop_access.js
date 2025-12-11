@@ -1,4 +1,4 @@
-// CONCEPT:  OPTIONAL CHAINING(?.) NOTATION optional object and property access
+// CONCEPT:  OPTIONAL CHAINING(?.) NOTATION optional object and property access.
 
 console.log() //
 let obj = {
@@ -14,8 +14,8 @@ obj.printName();
 
 // one of the use cases is on methods.
 // which would otherwise give errors when they were not defined.
-// obj.printsName(); // error: TypeError: obj.printsName is not a function
-obj.printsName?.(); // no error. (the missing method is handled graciously)
+// obj.printsName(); // error: TypeError: obj.printsName is not a function.
+obj.printsName?.(); // no error. (the missing method is handled graciously).
 //! notice when used on methods the ? is not placed "obj'here'." but obj.printsName'here'.()
 
 // this would work on other values as well.
