@@ -1,4 +1,4 @@
-// CONCEPT: optional object and property access / OPTIONAL CHAINING. WITH THE "?." NOTATION
+// CONCEPT:  OPTIONAL CHAINING(?.) NOTATION optional object and property access
 
 console.log() //
 let obj = {
