@@ -1,23 +1,11 @@
 function arrayToList(array) {
-    let tempObj = {};
-
-    //check if array is not empty
-    if (!array) return {};
-
-    // initialize list by adding the first element.
-    let list = {
-        value: array[array.length - 1],
-        rest: null,
-    };
-
-    for (let i = array.length - 2; i >= 0; i--) {
-        tempObj = {
+    let list = null;
+    for (let i = array.length - 1; i >= 0; i--) {
+        list = {
             value: array[i],
             rest: list,
-        }
-        list = tempObj;
+        };
     }
-
     return list;
 }
 
