@@ -1,3 +1,4 @@
+/* A function that returns a new array with elements of the argument, but in reverse order.*/
 function reverseArray(array) {
     let arrayReversed = [];
     let len = array.length;
@@ -14,8 +15,9 @@ let reversed = reverseArray(array);
 console.log(array);
 console.log(reversed);
 
+
+/* A function that modify the provided array by reversing it's element's order */
 function reverseArrayInPlace(array) {
-    // let's assume we had an array of 4 elements.
     let currentLast = array.length - 1;
     let desiredLen = Math.floor(array.length / 2);
     for (let i = 0; i < desiredLen; i++, currentLast--) {
