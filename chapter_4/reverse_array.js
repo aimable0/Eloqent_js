@@ -32,3 +32,4 @@ let arr = [5, 6, 7, 8, 9, 10]
 console.log(arr);
 reverseArrayInPlace(arr);
 console.log(arr); // [10, 9, 8, 7, 6, 5]
+
