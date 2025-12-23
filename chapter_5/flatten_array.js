@@ -47,3 +47,17 @@ function flatten_v2(a) {
 let ab = [1, 2, 3, 4, [0, -1, [-2, -3, [-4, -5]]], 9, [10, [11], [12, [13, 14, [15]]]]];
 let ab_flat = flatten_v1(ab);
 console.log(ab_flat);
+
+// more test with book solution.
+//
+let arraySample = [[1, 2, 3], [4, 5], [6]];
+console.log(arraySample.reduce((flat, current) => flat.concat(current), []));
+// book solution..
+console.log();
+console.log("book solution on this:", ab);
+console.log(ab.reduce((flat, current) => flat.concat(current), []));
+// my solution
+console.log(flatten(ab));
+
+// Review: my solution works but in real world it's less likely to be used, since we would rarely face such kind of nested data (as ab)...
+// but it was a good exercises...

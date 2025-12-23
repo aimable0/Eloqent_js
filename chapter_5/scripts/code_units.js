@@ -19,12 +19,7 @@ console.log(myName.charCodeAt(0)); // UTF-16 code unit for 'A'.
 console.log(myName.codePointAt(0)); // Unicode character code for 'A'
 // in this case they happen to be the same
 
-// but here is where they differ.
-// in some strings where a character takes up two 16-bit code units.
-// example
+// but here is where they differ: in some strings where a character takes up two 16-bit code units.
 let horseShoe = "🐴👟";
 console.log(horseShoe.charCodeAt(0)); // gives us a code unit. -> 55357
 console.log(horseShoe.codePointAt(0)); // full Unicode Character. -> 128052
-
-
-

@@ -13,3 +13,5 @@ console.log(loopFunc(arr, v => {
 }, (v) => console.log("here", v[v.length - 1]), arr => {
     return arr.slice(0, -1);
 }));
+
+// REVIEW: well done..

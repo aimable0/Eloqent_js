@@ -1132,16 +1132,8 @@ function groupItems(array, groupName) {
     return collection;
 }
 
-// test
-let sampleGrouping = groupItems([1, 2, 3, 4, 5, 6], e => e % 2 == 0);
-// console.log(sampleGrouping);
-
-// letter script: determines in which script can we find a particular character.
-// we can determine this using the charCode of a particular character and see what script contains that range.
-
-// it access global SCRIPT.
 function charScript(character) {
-    let code = character.charCodeAt(0);
+    let code = character.codePointAt(0);
     for (let script of SCRIPTS) {
         if (script.ranges.some(([from, to]) => code >= from && code < to))
             return script;
@@ -1149,14 +1141,20 @@ function charScript(character) {
     return null;
 }
 
-let char = 'a';
-console.log(charScript(char));
-
 function textDominantDirection(text) {
-    let textScriptsDirection = groupItems(text, (char) => charScript(char).direction);
-    let dominant = textScriptsDirection.reduce((curr, a) => (a.count > curr.count) ? a : curr);
-    return dominant.name;
+    let textScriptsDirection = groupItems(text, (char) => {
+        let scriptDir = charScript(char)?.direction;
+        return scriptDir ? scriptDir : 'none';
+    }).filter(({name}) => name != 'none');
+
+    if (textScriptsDirection.length == 0) return "rtl";
+
+    return textScriptsDirection.reduce((curr, a) => (a.count > curr.count) ? a : curr).name;
 }
 
-let dir = textDominantDirection("aimable");
+let dir = textDominantDirection(" ");
 console.log(dir);
+
+// REVIEW; this code lacked some error prevention mechanism (ex: it couldn't handle empty input, or whitespaces)
+// it was improved to handle that..
+// tip: think always in case where things could go wrong. (ex: in this worst case scenario, what could happen to my code)
