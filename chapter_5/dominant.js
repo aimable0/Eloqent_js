@@ -1,4 +1,4 @@
-// Generated from the Unicode 10 database and https://en.wikipedia.org/wiki/Script_(Unicode)
+/* A program that computes the dominant writing direction */
 
 var SCRIPTS = [
   {
@@ -1115,159 +1115,48 @@ var SCRIPTS = [
   }
 ];
 
-// This makes sure the data is exported in node.js —
-// `require('./path/to/scripts.js')` will get you the array.
-if (typeof module != "undefined" && module.exports && (typeof window == "undefined" || window.exports != exports))
-  module.exports = SCRIPTS;
-if (typeof global != "undefined" && !global.SCRIPTS)
-  global.SCRIPTS = SCRIPTS;
-
-// challenge 1: filter our array to find out elements in use
-function filter(array, test) {
-  let filteredArray = [];
-  for (let element of array) {
-    if (test(element)) filteredArray.push(element);
-  }
-  return filteredArray;
-}
-
-let scriptsLiving = filter(SCRIPTS, script => script.living);
-// console.log(scriptsLiving.slice(0, 2));
-
-// How would we implement our own MAP function
-// challenge2: We want an array of names.
-
-function map(array, transfrom) {
-  let mapped = [];
-  for (let element of array) {
-    mapped.push(transfrom(element));
-  }
-  return mapped;
-}
-
-
-let scriptNames = map(SCRIPTS.filter(script => script.direction === 'rtl'), element => "Name is " + element["name"]);
-console.log(scriptNames.slice(0, 10));
-
-let rtlScripts = SCRIPTS.map(element => "direction is " + element.direction);
-// console.log(rtlScripts.slice(0, 5));
-
-// challenge 3: what's the script with most characters.
-function reduce(array, combine, start) {
-  let current = start;
-  for (let element of array) {
-    current = combine(element, current);
-  }
-  return current;
-}
-
-function charCount(ranges) {
-  let chars = 0;
-  for (let range of ranges) {
-    chars += range[1] - range[0];
-  }
-  return chars;
-}
-
-console.log(reduce(SCRIPTS, (a, b) => {
-  return charCount(a.ranges) > b ? charCount(a.ranges): b;
-}, 0));
-
-// how could you do use reduce to calculate something simple like sum.
-console.log(reduce([1, 2, 3, 4,], (a, b) => b + a, 0));
-
-// how could we use reduce to return the greatest number
-console.log(reduce([1, 4, -1, 5, 0, 3, 2], (a, b) => a > b ? a : b, 0));
-
-// challenge: calculate the avg year of origin for dead scripts.
-
-//helper function
-function average(array) {
-  return array.reduce((a, b) => a + b) / array.length;
-}
-
-// dead.
-console.log();
-let deadScriptsYearAvg = Math.round(average(SCRIPTS.filter(script => !script.living).map(script => script.year)));
-console.log(deadScriptsYearAvg);
-
-
-// living.
-let livingScriptsYearAvg = Math.round(average(SCRIPTS.filter(script => script.living).map(script => script.year)));
-console.log(livingScriptsYearAvg);
-
-// how can we know the unicode of a certain number.
-// if we hand some unicode number, how would we make program that get the script that includes that unicode
-function characterScript(code) {
-  for (let element of SCRIPTS) {
-    for (let range of element.ranges)
-      if (range[0] <= code && range[1] >= code)
-        return element;
-  }
-}
-
-console.log();
-// console.log(characterScript(121)); // -> Latin
-
-// could we write this with high-order functions - the following works but admittedly its not very clear.
-function characterScriptv1(code) {
-  return SCRIPTS.filter((element) => {
-    for (let range of element.ranges)
-      if (range[0] <= code && range[1] >= code) return true;
-  })[0];
-}
-
-console.log();
-// console.log(characterScriptv1(121));
-
-// how about we introduce a new high-order function: ƒ SOME
-// what does ƒ SOME do; it accepts a function that tests whether some elements in the array passes a certain test
-// which returns true or false.
-
-function characterScriptv2(code) {
-  for (let script of SCRIPTS) {
-    if (script.ranges.some(([from, to]) => {
-      return from <= code && to > code;
-    })) return script;
-  }
-}
-console.log();
-console.log("Testing the function with 'some' HOF ");
-// console.log(characterScriptv2(121));
-
-console.log("\n---- TEXT SCRIPTS ------\n")
-// challenge 4: create a function that tells us what script are used in a specific piece of text
-// example output of the function.
-// “console.log(textScripts('英国的狗说"woof", 俄罗斯的狗说"тяв"'));
-// → 61% Han, 22% Latin, 17% Cyrillic”
+// helper functions
+// groupScripts: computes total elements that fits in specific groups
 
 function groupItems(array, groupName) {
-  let collection = [];
-  for (let item of array) {
-    let name = groupName(item);
-    let known = collection.find(a => a.name === name);
-    if (!known)
-      collection.push({name, count: 1});
-    else
-      known.count += 1;
-  }
-  return collection;
+    let collection = [];
+    for (let el of array) {
+        let name = groupName(el);
+        let known = collection.find(obj => obj.name == name);
+        if (!known) {
+            collection.push({name, count: 1});
+        } else {
+            known.count += 1;
+        }
+    }
+    return collection;
 }
 
-function textScripts(string, groupItems) {
-  let scriptsInText = groupItems(string, (a) => {
-    let script = characterScriptv2(a.charCodeAt(0));
-    return script ? script.name : "none";
-  }).filter(({name}) => name != "none");
-  let len = scriptsInText.reduce((tot, {count}) => tot + count, 0);
-  if (len == 0) return "No scripts found";
+// test
+let sampleGrouping = groupItems([1, 2, 3, 4, 5, 6], e => e % 2 == 0);
+// console.log(sampleGrouping);
 
-  // desired format sample: 61% Han, 22% Latin, 17% Cyrillic
-  return scriptsInText.map(({name, count}) => {
-    return `${Math.round(count/len * 100)}% ${name}`
-  }, "").join(', ');
+// letter script: determines in which script can we find a particular character.
+// we can determine this using the charCode of a particular character and see what script contains that range.
+
+// it access global SCRIPT.
+function charScript(character) {
+    let code = character.charCodeAt(0);
+    for (let script of SCRIPTS) {
+        if (script.ranges.some(([from, to]) => code >= from && code < to))
+            return script;
+    }
+    return null;
 }
 
-let sample = '“英国的狗说"woof", 俄罗斯的狗说"тяв”';
-let sample1 = "";
-console.log(textScripts(sample1, groupItems));
+let char = 'a';
+console.log(charScript(char));
+
+function textDominantDirection(text) {
+    let textScriptsDirection = groupItems(text, (char) => charScript(char).direction);
+    let dominant = textScriptsDirection.reduce((curr, a) => (a.count > curr.count) ? a : curr);
+    return dominant.name;
+}
+
+let dir = textDominantDirection("aimable");
+console.log(dir);
