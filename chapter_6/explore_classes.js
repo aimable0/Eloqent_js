@@ -1,6 +1,6 @@
 // private properties: these are properties that can't be access outside of the class
 
-// class order of execution
+// class order of execution when a new insance is created.
 // The engine does this:
 	// 1.	Allocate a new object.
 	// 2.	Bind this.
@@ -15,6 +15,7 @@ class Computer {
     // example consider the follwing case:
     returnsUndefined = this.returnUndefined(this.name); // this is also known as insance field. (this run before constructor)
 
+    // example of stale derived state.
     returnUndefined() {
         console.log(`This.name is ${this.name}`);
         return this.name; // undefined if this happens to be called before constructore (moment of creating fresh instance)
@@ -27,14 +28,12 @@ class Computer {
         // console.log("now label is:", this.label); // test.
     }
 
-    // sometihng like this.name wouldn't give the the this.name set in the constructor.
-    // how can I access it ?
-    // maybe this is where we need getters and setters.
+    // sometihng like this.name wouldn't give the the this.name set in the constructor at the time of creation.
+    // how can I access it ?: this is where we need getters and setters.
     // description = `This is a ${this.#model} computer`;
 
-
-
     // here we should use setters and getters.
+    // concept: computed once vs computed on access.
     setMode() {
         console.log("executed this.. 1");
         console.log('at this time label is:', this.label);
@@ -84,6 +83,5 @@ console.log('\n\n');
 // how would some functions handle differenty types of objects.
 
 // let's find out.
-
 console.log([1, 2].toString());
 console.log(Object.prototype.toString());
