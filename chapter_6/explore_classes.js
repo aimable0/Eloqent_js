@@ -13,7 +13,8 @@ class Computer {
     // if any instance field initialization tries to get its value using a function that relies on properties set by constructor the values will be undefined.
     // since instance initializatio happens before calling constructor function (executing its body)
     // example consider the follwing case:
-    returnsUndefined = this.returnUndefined(this.name); // this is also known as insance field. (this run before constructor)
+    returnsUndefined = this.returnUndefined(this.name); // this field is also known as instance field.
+    // note: (this run before constructor).
 
     // example of stale derived state.
     returnUndefined() {
@@ -69,19 +70,3 @@ value = sampleComp.returnUndefined();
 console.log(value) // valid name. because the function returns this.type.
 // console.log(sampleComp.returnsUndefined); // undefined
 // sampleComp.setMode();
-
-
-
-
-
-
-
-
-
-// ----- POLYMORPHISM ------------
-console.log('\n\n');
-// how would some functions handle differenty types of objects.
-
-// let's find out.
-console.log([1, 2].toString());
-console.log(Object.prototype.toString());
