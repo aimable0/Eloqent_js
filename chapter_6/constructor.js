@@ -6,7 +6,18 @@
 let protoRabbit = {
     speak(line) {
         console.log(`This ${this.type}rabbit says '${line}'`);
-    }
+    },
+    // --- for test purposes ---.
+    // name,
+    printName() {
+        console.log(`My name is ${this.name}`);
+    },
+    setName() {
+        // this.name = 'water'; // test with this.name
+        console.log('This.type equals:', this.type);
+        console.log('This.type equals:', this.name);
+    },
+    // -- end ---
 };
 
 // 2. we use the prototype to create
@@ -30,16 +41,24 @@ console.log(Object.getPrototypeOf(Object.prototype)); // -> null.
 // before we use class
 
 // let's break down what class really does behind the scene (using our rabbit example).
-console.log();
+console.log('---- MANUAL INSTANCE CREATION ---- \n');
 let sampleRabbit = {};
 Object.setPrototypeOf(sampleRabbit, protoRabbit);
 // console.log(Object.getPrototypeOf(sampleRabbit) == protoRabbit); //-> true.
+
+// function to set props values.
 function rabbitty(type) {
     this.type = type;
+    this.name = 'kudus'; // testing..
 }
-rabbitty.call(sampleRabbit, 'Runner');
+rabbitty.call(sampleRabbit, 'Runner'); // calls the set the props function (kinda like the constructor)
 sampleRabbit.speak("Hey, oo .. I am here!");
+console.log(sampleRabbit);
+sampleRabbit.setName();
+// sampleRabbit.setName();
+sampleRabbit.printName();
 
+console.log('\n\n---- MANUAL INSTANCE CREATION ----\n\n');
 
 
 // ----- CLASS ------
