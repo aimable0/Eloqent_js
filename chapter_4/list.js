@@ -9,12 +9,12 @@ function arrayToList(array) {
     return list;
 }
 
-let list = arrayToList([1, 2, 3, 4, 5]);
+let list = arrayToList([1, 2, 3]);
 console.log(list);
 
 
-//! notice that the console.log won't display more than 2 nested object,
+//! it's worth noting that the console.log won't display more than 2 nested object,
 //! the rest will be represented by [Object]
 // we could try to check their values (using optional chaining) as follows.
-console.log(list?.rest?.rest?.rest?.value);
-console.log(list?.rest?.rest?.rest?.rest?.value);
+// console.log(list?.rest?.rest?.rest?.value);
+// console.log(list?.rest?.rest?.rest?.rest?.value);
